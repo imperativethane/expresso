@@ -99,4 +99,19 @@ employeesRouter.put('/:employeeId', (req, res, next) => {
     });
 });
 
+employeesRouter.delete('/:employeeId', (req, res, next) => {
+    const sql = 'UPDATE Employee SET is_current_employee = 0 WHERE id = $employeeId';
+    const values = {$employeeId: req.params.employeeId};
+    db.run(sql, values, (err) => {
+        if (err) {
+            next(err);
+        } else {
+            const sql = `SELECT * FROM Employee WHERE id = ${req.params.employeeId}`;
+            db.get(sql, (err, employee) => {
+                res.send({employee: employee});
+            });
+        }
+    });
+});
+
 module.exports = employeesRouter;
