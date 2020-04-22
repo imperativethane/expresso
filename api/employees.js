@@ -15,6 +15,7 @@ employeesRouter.param('employeeId', (req, res, next, employeeId) => {
             res.sendStatus(404);
         } else {
             req.employee = employee;
+            next();
         }
     });
 });
@@ -28,6 +29,10 @@ employeesRouter.get('/', (req, res, next) => {
             res.send({employees: employees});
         }
     });
+});
+
+employeesRouter.get('/:employeeId', (req, res, next) => {
+    res.send({employee: req.employee});
 });
 
 employeesRouter.post('/', (req, res, next) => {
